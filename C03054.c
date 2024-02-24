@@ -1,26 +1,30 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
-bool checkValid(long long n){
-    long long res = n;
-    bool ok = false;
-    while(n){
-        int k = n % 10;
-        if(k == 1){
-            ok = true;
+#include <ctype.h>
+#include <string.h>
+void cut(char *c){
+    int len = strlen(c);
+    for (int i = 0; i < len; i++){
+        if(c[i] == '8' || c[i] == '9'){
+            c[i] = '0';
         }
-        n /= 10;
     }
-    if(ok == false){
+}
+bool check(char *c){
+    int len = strlen(c);
+    int cnt = 0;
+    for (int i = 0; i < len; i++){
+        if(c[i] == '0'){
+            cnt += 1;
+        }
+    }
+    if(cnt == len){
         return false;
     }
-    else{
-        while(res){
-            int r = res % 10;
-            if(r == 3 || r == 2 || r == 4 || r == 5 || r == 6 || r == 7){
-                return false;
-            }
-            res /= 10;
+    for (int i = 0; i < len; i++){
+        if(c[i] != '0' && c[i] != '1'){
+            return false;
         }
     }
     return true;
@@ -29,38 +33,25 @@ int main(){
     int t;
     scanf("%d", &t);
     while(t--){
-        long long n;
-        scanf("%lld", &n);
-        int cnt = 0;
-        if(n < 10){
-            if(n == 1){
-                printf("1\n");
+        char c[20];
+        scanf("%s", c);
+        cut(c);
+        int tmp = -1;
+        if(check(c)){
+            for (int i = 0; i < strlen(c); i++){
+                if(c[i] == '1'){
+                    tmp = i;
+                    break;
+                }
             }
-            else{
-                if(n == 2 || n == 3 || n == 4 || n == 5 || n == 6 || n == 7){
-                    printf("INVALID\n");
-                }
-                else{
-                    printf("0\n");
-                }
+            for (int i = tmp; i < strlen(c); i++){
+                printf("%c", c[i]);
             }
         }
         else{
-            if(checkValid(n)){
-                while(n){
-                    cnt += 1;
-                    if(n % 10 == 1){
-                        long long tmp = pow(10, cnt - 1);
-                        printf("%lld\n", tmp);
-                        break;
-                    }
-                    n /= 10;
-                }
-            }
-            else{
-                printf("INVALID\n");
-            }
+            printf("INVALID");
         }
+        printf("\n");
     }
     return 0;
 }
