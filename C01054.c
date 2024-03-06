@@ -1,29 +1,42 @@
 #include <stdio.h>
-#include <math.h>
-int ptich(int n){
-    int sum = 0;
-    for (int i = 2; i <= sqrt(n); i++){
-        if(n % i == 0){
-            while(n % i == 0){
-                sum += i;
-                n /= i;
-            }
-        }
-    }
-    if(n > 1){
-        sum += n;
-    }
-    return sum;
+#define lmt 2000000 // lmt: limit
+
+int a[lmt + 1] = {0};
+void eratosthenes()
+{
+    for (int i = 2; i * i <= lmt; i++)
+        if (a[i] == 0)
+            for (int j = i * i; j <= lmt; j += i)
+                if (a[j] == 0)
+                    a[j] = i;
+    for (int i = 2; i <= lmt; i++)
+        if (a[i] == 0)
+            a[i] = i;
 }
-int main(){
-    int t;
-    scanf("%d", &t);
-    int sum = 0;
-    while(t--){
-        int n;
-        scanf("%d", &n);
-        sum += ptich(n);
+
+int SUM(int n)
+{
+    int s = 0;
+    while (n != 1)
+    {
+        s += a[n];
+        n /= a[n];
     }
-    printf("%d", sum);
+    return s;
+}
+
+int main()
+{
+    eratosthenes();
+    int n;
+    scanf("%d", &n);
+    long long sum = 0;
+    while (n--)
+    {
+        int x;
+        scanf("%d", &x);
+        sum += SUM(x);
+    }
+    printf("%lld", sum);
     return 0;
 }
